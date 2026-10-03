@@ -1,0 +1,4 @@
+Model,MAE,RMSE,R2
+Persistence (tomorrow = today),26.242,59.867,0.744
+Linear Regression,25.657,48.565,0.832
+Random Forest,22.727,48.193,0.834
