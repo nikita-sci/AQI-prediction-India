@@ -18,6 +18,3 @@ models/*.pkl
 .DS_Store
 .vscode/
 .idea/
-
-# Output data and images
-outputs
