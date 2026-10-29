@@ -1,78 +1,96 @@
-# AQI Prediction — Date Feature Engineering and EDA (2022–2025)
+# AQI Prediction for India
 
-## Overview
-This branch focuses on the cleaned 2022–2025 Air Quality Index (AQI) dataset as part of the AQI Prediction project. The aim is to prepare the dataset for exploratory data analysis (EDA) and investigate temporal patterns and variations in air quality.
+Exploratory analysis and prediction of Air Quality Index (AQI) across Indian cities.
+Course project for **IDC409 – Data Science**, IISER.
 
-## Objectives
-- Perform date feature engineering on the cleaned AQI dataset.
-- Analyze AQI trends across years, months, seasons, weekdays, and cities.
-- Visualize AQI distributions and air quality category frequencies.
-- Identify missing data and retain genuine high-AQI observations during EDA.
-- Prepare analysis outputs for integration with the historical dataset maintained by another team member.
+> **Status:** EDA on the 2023–2025 dataset is complete. Feature engineering and modelling are in progress.
 
-## Dataset
-The dataset contains air quality observations from 2022–2025.
+---
 
-Relevant columns include:
-- `date`: Date of observation.
-- `state`: State associated with the observation.
-- `area`: City or area where air quality was recorded.
-- `aqi_value`: Recorded AQI value.
-- `air_quality_status`: Air quality category.
-- `prominent_pollutants`: Text describing the prominent pollutants.
-- `number_of_monitoring_stations`: Number of monitoring stations, where available.
+## Project goal
 
-The dataset is maintained separately from the historical dataset to allow independent analysis before integration.
+1. Understand how AQI varies across **cities, states, months, seasons and festivals** (Diwali).
+2. Check whether past AQI is a strong enough signal to support **next-day AQI prediction**.
+3. Build a classifier for the **AQI category** (`Good` to `Severe`) and report per-class metrics, since the rare classes matter most.
 
-## Work Completed
+---
 
-### 1. Dataset Preparation
-- Worked with the cleaned 2022–2025 AQI dataset.
-- Identified the relevant columns for temporal and city-wise analysis.
-- Reviewed the dataset's structure and identified limitations affecting further analysis.
+## Datasets
 
-### 2. Date Feature Engineering
-The following features have been identified for temporal analysis:
-- `Year`: Year of observation.
-- `Month`: Month of observation.
-- `Weekday`: Day of the week.
-- `Is_Weekend`: Indicates whether an observation falls on a weekend.
-- `Season`: Season associated with the observation date.
+| Dataset | Period | What it contains | Used for |
+|---|---|---|---|
+| 2023–2025 AQI file (`aqi_2023_2025_clean.csv`) | Jan 2023 – Apr 2025 | Daily AQI, category, dominant pollutant, number of monitoring stations, city and state (~291 cities, ~32 states) | Geography, seasonality, category balance, classification |
 
-These features will support comparisons of AQI patterns over time.
+**Limitation:** the 2023–2025 file has no pollutant concentrations, only which pollutant was dominant. It therefore supports **classification of `AQI_Bucket`**, not pollutant regression.
 
-### 3. Exploratory Data Analysis (EDA)
-The planned EDA includes:
-- AQI distribution analysis.
-- Yearly and monthly AQI trends.
-- Seasonal variations in AQI.
-- Weekday versus weekend comparisons.
-- City-wise AQI comparisons.
-- Air quality category distributions.
-- Examination of unusually high AQI observations.
+Raw files are not committed. Put the source CSVs in `data/Raw/` and the output of the cleaning notebook in `data/Cleaned/`.
 
-## Tools and Libraries
-- Python
-- pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Jupyter Notebook
+---
 
-## Dataset Limitations
-- The dataset contains a `prominent_pollutants` text column rather than separate numerical concentration columns for individual pollutants.
-- Pollutant concentration correlation heatmaps cannot be generated from this dataset alone.
-- Missing values should be handled according to the requirements of each analysis rather than filled unnecessarily.
-- Unusually high AQI values should be retained during EDA unless a data-quality issue is verified.
-- If 2025 observations cover only part of the year, yearly comparisons must account for this incomplete coverage.
+## Repository structure
 
-## Next Steps
-- Implement date feature engineering.
-- Generate and interpret EDA visualizations.
-- Save the feature-enhanced dataset, plots, and summary statistics.
-- Compare the recent dataset with the historical dataset and identify compatible columns.
-- Support combined analysis and subsequent AQI prediction modelling.
+```
+AQI-prediction-India/
+├── data/
+│   ├── Raw/                  # original downloads (not tracked)
+│   └── Cleaned/              # cleaned CSVs used by the notebooks
+├── notebooks/
+│   ├── 01_clean_2023_25.ipynb
+│   ├── 02_eda_2023_25.ipynb 
+│   └── ...                   
+├── reports/
+│   ├── figures/2023_25/      # saved plots (PNG)
+│   └── results/2023_25/      # CSV tables behind each plot
+├── requirements.txt
+└── README.md
+```
 
-## Project Context
-This work contributes to the group project on Air Quality Index prediction by focusing on temporal analysis of recent air quality data. The resulting features and EDA findings will support dataset integration, interpretation of air quality patterns, and later modelling.
+Every plot saved to `reports/figures/2023_25/` has a matching table in `reports/results/2023_25/` with the same name (for example `2023_25_city_month_heatmap.png` and `2023_25_city_month_heatmap.csv`).
 
+---
+
+## EDA notebook: `02_eda_2023_25.ipynb`
+
+| Section | Contents |
+|---|---|
+| **A. Data quality** | Missing values, duplicate (City, Date) rows, AQI range check, days per city, AQI vs category consistency |
+| **B. Geography** | City-wise and state-wise average AQI |
+| **C. Time patterns** | National and city trends, monthly boxplot, city × month heatmap, weekday boxplot, fair Jan–Apr year comparison, Diwali window |
+| **D. Categories and pollutants** | AQI category balance, Very Poor/Severe by state and month, dominant pollutant overall and by month, monitoring stations vs AQI |
+| **E. Time-series diagnostics** | Delhi vs Chandigarh vs Mumbai comparison, autocorrelation of AQI |
+| **F. Summary** | Auto-generated key numbers and written findings |
+
+### Features created during EDA
+
+| Feature | Definition |
+|---|---|
+| `season` | Winter (Dec–Feb), Summer (Mar–May), Monsoon (Jun–Sep), Post-Monsoon (Oct–Nov) |
+| `weekday` | Day name from the date |
+| `is_winter` | 1 for Nov–Feb, else 0 (November is included because post-Diwali and stubble-burning pollution is already high in North India) |
+
+---
+
+## Key findings
+
+*Fill in from the "Key numbers" cell at the end of the notebook.*
+
+- **Most polluted city / state:** ...
+- **Cleanest city:** ...
+- **Worst and best months:** ... (winter months are worst, monsoon best)
+- **Days Poor or worse (AQI > 200):** ...%
+- **Diwali effect:** AQI rose from ... to ... within 3 days of Diwali (2023) and ... to ... (2024)
+- **Weekday effect:** ...
+- **Class imbalance:** `Severe` is only ...% of the data, so accuracy alone is misleading
+- **Autocorrelation:** lag-1 correlation ... and lag-7 correlation ..., supporting next-day prediction
+
+---
+
+## Roadmap
+
+- [x] Data cleaning
+- [x] EDA on 2023–2025 data
+- [x] EDA on `city_day.csv` (2015–2020)
+- [ ] Feature engineering (calendar features, lag features, festival flag)
+- [ ] Classification of `AQI_Bucket` with per-class precision, recall and F1
+- [ ] Next-day AQI prediction
+- [ ] Final report
