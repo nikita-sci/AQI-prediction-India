@@ -27,13 +27,12 @@ outputs/
   results/                           # city_hour_*.csv
 ```
 
-Add this to `.gitignore`:
+Added this to `.gitignore`:
 
 ```
 data/processed/*.db
 ```
 
-The raw CSV (~65 MB) fits under GitHub's 100 MB file limit, but you can git-ignore it as well if you prefer a lighter repo.
 
 ---
 
