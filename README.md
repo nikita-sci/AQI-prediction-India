@@ -12,7 +12,7 @@ CITY DAYS: 2023-25 by Nikita
 - **Classification:** predict the AQI category (Good, Satisfactory, Moderate, Poor, Very Poor, Severe).
 - **EDA:** study city-wise AQI, pollutant correlations, and monthly, seasonal and yearly trends.
 
-## Data
+## We sourced the data from: 
 
 - Source: [Air Quality Data in India (2015-2020)](https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india) on Kaggle, file `city_day.csv`.
 - 29,531 daily records for 26 cities, from 2015-01-01 to 2020-07-01.
