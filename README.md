@@ -1,13 +1,9 @@
-# AQI-prediction-India
-Machine learning project for analysing Indian air quality data and predicting AQI.
-
-
-ADDED BY ADITRI FOR MY CITY_DAY CSV WORK
-# AQI Prediction for Indian Cities
-
+# AQI prediction in India: Different cities across the country
 Predicting the Air Quality Index (AQI) and the AQI category from daily pollutant readings, city and date features, using Indian air-quality data from 2015 to 2020.
-
-**Author:** Aditri Srivastava
+PARTS: 
+CITY DAYS: 2015-20 by Aditri Srivastava
+CITY HOURS: 2015-20 by Parul
+CITY DAYS: 2023-25 by Nikita
 
 ## Project goals
 
