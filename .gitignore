@@ -18,3 +18,4 @@ models/*.pkl
 .DS_Store
 .vscode/
 .idea/
+models/*.pkl
