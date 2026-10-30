@@ -159,6 +159,223 @@ The confusion matrix is saved as `outputs/12_rf_confusion_matrix.png`.
 - Add XGBoost, or use the 2023-2025 dataset for recent AQI trends.
 
 
+# Air Quality Analysis and AQI Modeling Across Indian Cities
+
+This repository contains two complementary air-quality analysis workflows using datasets from Indian cities:
+
+1. **City-hour analysis** — hourly data cleaning, exploratory analysis, AQI regression and classification, short-term forecasting, and event/behaviour studies.
+2. **Pollutant-based AQI estimation** — daily data modeling using pollutant measurements, city information, and date-related features to estimate AQI.
+
+The workflows use different source datasets and prediction setups. Their results should therefore be interpreted separately.
+
+---
+
+## Project Workflows
+
+| Workflow | Dataset | Main notebook(s) | Focus |
+|---|---|---|---|
+| City-hour analysis | `city_hour.csv` | `notebooks/city_hour_analysis.ipynb` | Hourly cleaning, EDA, feature engineering, AQI regression and classification |
+| City-hour extensions | `city_hour.csv` | `notebooks/city_hour_extension.ipynb` | Next-hour and next-day forecasting, Diwali and lockdown analysis, PCA, city comparison |
+| Daily pollutant-based estimation | `city_day.csv` | `notebooks/model_a_pollutant_rf.ipynb` | AQI estimation from pollutant measurements, city, month, and day of week |
+
+## Repository Layout
+
+```text
+data/
+  raw/
+    city_hour.csv
+    city_day.csv
+  processed/
+    city_hour_clean.csv.gz
+    city_hour.db
+notebooks/
+  city_hour_analysis.ipynb
+  city_hour_extension.ipynb
+  model_a_pollutant_rf.ipynb
+outputs/
+  figures/
+    city_hour/
+  results/
+```
+
+The city-hour workflow stores figures in `outputs/figures/city_hour/` and result tables in `outputs/results/`. Its processed database files are excluded from Git with:
+
+```gitignore
+data/processed/*.db
+```
+
+The exact availability and placement of the raw datasets may depend on how the repository is set up locally.
+
+---
+
+## 1. City-Hour Air Quality Analysis
+
+This workflow analyzes hourly air-quality observations across Indian cities.
+
+### Core analysis
+
+The core notebook, `notebooks/city_hour_analysis.ipynb`, includes:
+
+1. **Data cleaning:** parse dates, remove duplicates, sort observations, drop empty rows, and drop Xylene because it has 61% missing values.
+2. **Hourly exploratory data analysis.**
+3. **Time-based features:** hour, rush-hour, night, weekend, season, and cyclic hour encoding.
+4. **Missing-value imputation:** predictor values are imputed using training-only city and month medians to avoid data leakage.
+5. **Train-test split:** train on 2015–2019 and test on 2020.
+6. **Modeling:** Linear/Logistic baselines, Decision Tree, and Random Forest models.
+
+### Core model results
+
+Test set: **2020**
+
+| Task | Best model | Result |
+|---|---|---|
+| AQI regression | Random Forest | MAE: 33.2; RMSE: 58.8; R²: 0.578 |
+| AQI classification | Random Forest | Accuracy: 0.667; macro-F1: 0.548 |
+
+The reported baseline results were R² 0.517 for regression and accuracy 0.643 / macro-F1 0.530 for classification.
+
+### Extensions
+
+The extension notebook, `notebooks/city_hour_extension.ipynb`, contains the following analyses:
+
+| Analysis | Key finding |
+|---|---|
+| Next-hour forecast (2020 test set) | Persistence R² 0.968, Linear R² 0.973, and Random Forest R² 0.976. Random Forest RMSE was 14.1 versus 16.2 for persistence, but its MAE was 2.98 versus 2.73. This suggests it improves on larger swings, but not on typical hourly errors. |
+| Next-day (24-hour-ahead) forecast | Persistence R² 0.608, Linear R² 0.630, and Random Forest R² 0.632. The gain over persistence is small; the analysis notes that no weather data is included. |
+| Diwali effect | Delhi peak hourly PM2.5 was 2.9×–8.8× the pre-Diwali baseline (peak 515–798 µg/m³); across all cities the reported increase was 3.8×–7.4×. The spike appears within about a day of Diwali night. |
+| COVID-19 lockdown | Comparing 25 March–30 June 2020 with 2018–2019, median changes across cities were PM2.5 −41%, NO2 −43%, and CO −28%. Every city with data showed a PM2.5 fall (−7% to −57%). |
+| PCA versus raw pollutants | Raw 11-pollutant features achieved R² 0.598. PCA with 9 components (90% variance) achieved R² 0.389; PCA with 4 components achieved R² 0.415. In this analysis, PCA reduced performance. |
+| City comparison | Mean hourly AQI examples: Ahmedabad 455, Delhi 260, Lucknow 218, Kolkata 141, and Bengaluru 94. Ahmedabad's result has a data-quality caveat described below. |
+
+### City-hour outputs
+
+- Figures: `outputs/figures/city_hour/` (extension figures are numbered `12-17_*.png`).
+- Results:
+  - `outputs/results/city_hour_forecast_results.csv`
+  - `outputs/results/city_hour_diwali_effect.csv`
+  - `outputs/results/city_hour_lockdown_change_pct.csv`
+  - `outputs/results/city_hour_pca_comparison.csv`
+  - `outputs/results/city_hour_city_comparison.csv`
+
+---
+
+## 2. Daily Pollutant-Based AQI Estimation
+
+This workflow estimates AQI from daily pollutant measurements using a Random Forest Regression model.
+
+### Dataset and features
+
+- **Dataset:** `city_day.csv`
+- **Data period:** 2015–2020
+- **Target:** AQI
+
+Available pollutant inputs used by the model include:
+
+- PM2.5 and PM10
+- NO, NO₂, and NOx
+- NH₃
+- CO
+- SO₂
+- O₃
+- Benzene, Toluene, and Xylene
+
+Only pollutant columns available in the dataset are used. The workflow also uses **City**, **Month**, and **Day of the week** as features.
+
+### Methodology
+
+1. Convert dates to the appropriate format.
+2. Remove rows with missing dates or AQI values.
+3. Remove duplicate city-date records.
+4. Filter the data to the 2015–2020 period.
+5. Extract month and day-of-week features from the date.
+6. Train on data from 2015–2019 and test on 2020.
+7. Impute numerical features using the median and the city feature using the most frequent value.
+8. Apply one-hot encoding to the city feature.
+9. Train a Random Forest Regressor with 100 trees.
+10. Evaluate predictions using MAE, RMSE, and R².
+
+### Model performance
+
+Test set: **2020**
+
+| Evaluation metric | Value |
+|---|---:|
+| Mean Absolute Error (MAE) | 16.11 |
+| Root Mean Squared Error (RMSE) | 26.70 |
+| R² score | 0.898 |
+
+The reported results indicate that the model captures much of the variation in AQI, although predictions can be less accurate for some extreme AQI observations.
+
+### Visualizations and error analysis
+
+The notebook includes:
+
+- Actual-versus-predicted AQI comparison.
+- Feature-importance analysis.
+- Analysis of observations with the largest prediction errors.
+
+Main notebook: `notebooks/model_a_pollutant_rf.ipynb`.
+
+---
+
+## Important Caveats and Limitations
+
+### City-hour workflow
+
+- **Ahmedabad data quality:** hourly AQI is unusually high in this dataset (median 312, with 5.5% of readings above 1000). The analysis suggests this may be a data or sensor quirk. It also explains why `city_Ahmedabad` is important in the core models and why Ahmedabad's city-comparison value is inflated.
+- **Lockdown comparison is observational:** weather differs between years, so the observed changes cannot be attributed to lockdown alone.
+- **Diwali dates:** the baseline analysis uses a single manually entered list of Diwali dates.
+- **Forecasting inputs:** the forecasting analysis does not include weather inputs, limiting next-day accuracy.
+
+### Daily pollutant-based estimation workflow
+
+- This model estimates AQI using pollutant measurements available for a given observation.
+- **It is not a future AQI forecasting model.** It does not predict future pollutant concentrations. Predicting AQI in advance would require a separate forecasting approach.
+- Error analysis indicates that predictions may be less accurate for extreme AQI observations.
+
+---
+
+## Tools and Libraries
+
+The workflows use the following tools and libraries:
+
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Scikit-learn
+- Google Colab
+- Git and GitHub
+
+---
+
+## Future Improvements
+
+Potential next steps identified by the project analyses include:
+
+- Evaluate model performance separately for different cities.
+- Investigate prediction errors for extreme AQI values.
+- Compare Random Forest with other regression algorithms.
+- Explore a separate time-series forecasting model for future AQI prediction.
+
+Additional work could also investigate the limitations noted in the city-hour analysis, including the absence of weather inputs in forecasting and the Ahmedabad data-quality issue.
+
+---
+
+## Running the Notebooks
+
+Open the relevant notebook in Jupyter or Google Colab after making the required dataset files available in the expected repository locations.
+
+- For hourly analysis and extensions, use `city_hour.csv` with:
+  - `notebooks/city_hour_analysis.ipynb`
+  - `notebooks/city_hour_extension.ipynb`
+- For daily pollutant-based AQI estimation, use `city_day.csv` with:
+  - `notebooks/model_a_pollutant_rf.ipynb`
+
+Each notebook contains its own preprocessing, analysis, and modeling steps.
+
+
+
 
 ## Indian Air Quality Index (AQI): Analysis, Prediction and Cross-Period Forecasting(DATASET:2023-25)
 
