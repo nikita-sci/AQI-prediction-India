@@ -31,3 +31,43 @@ ALL_FEATURES = [c for cols in FEATURE_GROUPS.values() for c in cols]
 CATEGORICAL = ['season', 'state', 'pollutant_today', 'pollutant_prev']
 NUMERIC = [c for c in ALL_FEATURES if c not in CATEGORICAL + ['City']]
 
+# ------------------------------------------------------------- transformers
+class CityStats(BaseEstimator, TransformerMixin):
+    """Mean and std of today's AQI for each city, learned only from the rows it is fitted on.
+
+    Fitting happens inside each cross-validation fold, so a city's statistics never
+    include validation or test rows (no leakage). Unseen cities get the global values.
+    Input: DataFrame with columns ['City', 'AQI'].
+    """
+
+    def fit(self, X, y=None):
+        g = X.groupby('City')['AQI']
+        self.mean_ = g.mean()
+        self.std_ = g.std().fillna(0.0)
+        self.global_mean_ = float(X['AQI'].mean())
+        self.global_std_ = float(X['AQI'].std())
+        return self
+
+    def transform(self, X):
+        m = X['City'].map(self.mean_).astype(float).fillna(self.global_mean_)
+        s = X['City'].map(self.std_).astype(float).fillna(self.global_std_)
+        return np.column_stack([m.to_numpy(), s.to_numpy()])
+
+    def get_feature_names_out(self, input_features=None):
+        return np.array(['city_mean_aqi', 'city_std_aqi'])
+
+
+def build_preprocessor(columns, scale=False):
+    """ColumnTransformer for whichever of the feature columns are in `columns`."""
+    cols = list(columns)
+    num = [c for c in cols if c in NUMERIC]
+    cat = [c for c in cols if c in CATEGORICAL]
+    parts = []
+    if num:
+        parts.append(('num', StandardScaler() if scale else 'passthrough', num))
+    if cat:
+        parts.append(('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat))
+    if 'City' in cols:
+        steps = [('stats', CityStats())] + ([('scale', StandardScaler())] if scale else [])
+        parts.append(('city', Pipeline(steps), ['City', 'AQI']))
+    return ColumnTransformer(parts, remainder='drop', sparse_threshold=0)
