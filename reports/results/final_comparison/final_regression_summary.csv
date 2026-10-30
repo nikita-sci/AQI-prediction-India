@@ -1,0 +1,21 @@
+Experiment,Task,Model,Training,MAE,RMSE,R2
+Model A — same-day AQI,Same-day AQI estimation,Baseline (predict mean),,102.224,130.034,-0.169
+Model A — same-day AQI,Same-day AQI estimation,Linear Regression,,27.802,45.866,0.855
+Model A — same-day AQI,Same-day AQI estimation,Decision Tree,,23.812,50.536,0.823
+Model A — same-day AQI,Same-day AQI estimation,Random Forest,,19.961,41.165,0.883
+Model A — next-day AQI,Next-day AQI forecast,Persistence (tomorrow = today),,26.242,59.867,0.744
+Model A — next-day AQI,Next-day AQI forecast,Linear Regression,,25.657,48.565,0.832
+Model A — next-day AQI,Next-day AQI forecast,Random Forest,,22.727,48.193,0.834
+Recent — next-day AQI,Next-day AQI forecast,Hist Gradient Boosting,,23.50474106459396,33.85419214722356,0.7276952133389444
+Recent — next-day AQI,Next-day AQI forecast,Hist Gradient Boosting (tuned),,23.5078286609436,33.85841615912901,0.7276272577715766
+Recent — next-day AQI,Next-day AQI forecast,Random Forest,,23.53107160758788,33.9759520796152,0.7257329490297082
+Recent — next-day AQI,Next-day AQI forecast,Ridge Regression,,23.613583008837267,33.9183467949774,0.7266621849740864
+Recent — next-day AQI,Next-day AQI forecast,Baseline: tomorrow = today,,24.782693395337144,37.15815216721115,0.6719511015993587
+Recent — next-day AQI,Next-day AQI forecast,Baseline: 7-day mean,,30.651185314193548,43.39688081998348,0.5525470282352849
+Model B — cross-period,Next-day AQI forecast (matched recent test),Hist Gradient Boosting,Historical 2015–2020,23.210311390826984,33.36278941975173,0.7995407673321635
+Model B — cross-period,Next-day AQI forecast (matched recent test),Hist Gradient Boosting,Recent pre-test (2023–2024),23.31282927904242,33.66043449077758,0.7959480308477751
+Model B — cross-period,Next-day AQI forecast (matched recent test),Persistence (tomorrow = today),No fitting,24.27025527192009,35.82599921503693,0.768847827717565
+Model B — cross-period,Next-day AQI forecast (matched recent test),Random Forest,Historical 2015–2020,23.45781038467584,33.56890919658249,0.7970561880161339
+Model B — cross-period,Next-day AQI forecast (matched recent test),Random Forest,Recent pre-test (2023–2024),23.53156881257852,33.935005721677214,0.7926055126036643
+Model B — cross-period,Next-day AQI forecast (matched recent test),Ridge Regression,Historical 2015–2020,23.33624181958794,33.477163745567815,0.79816398260692
+Model B — cross-period,Next-day AQI forecast (matched recent test),Ridge Regression,Recent pre-test (2023–2024),23.089889243816653,33.118916143027526,0.802460665604837
