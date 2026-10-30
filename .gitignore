@@ -5,6 +5,7 @@ __pycache__/
 
 # Environment
 venv/
+.venv/
 env/
 .env
 
@@ -18,3 +19,4 @@ models/*.pkl
 .DS_Store
 .vscode/
 .idea/
+
