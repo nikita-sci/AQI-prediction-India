@@ -1,0 +1,22 @@
+City,Model,n,MAE
+Delhi,Persistence,175,35.74857142857143
+Delhi,Historical - Ridge Regression,175,34.818706666728524
+Delhi,Historical - Random Forest,175,35.249877305630015
+Delhi,Historical - Hist Gradient Boosting,175,34.20949981734457
+Delhi,Recent - Ridge Regression,175,35.13570986941699
+Delhi,Recent - Random Forest,175,35.829059022292256
+Delhi,Recent - Hist Gradient Boosting,175,35.64913296536764
+Chandigarh,Persistence,175,31.354285714285716
+Chandigarh,Historical - Ridge Regression,175,29.344609613739177
+Chandigarh,Historical - Random Forest,175,29.796582541478212
+Chandigarh,Historical - Hist Gradient Boosting,175,29.79734413592988
+Chandigarh,Recent - Ridge Regression,175,29.647179616339546
+Chandigarh,Recent - Random Forest,175,29.60604822281639
+Chandigarh,Recent - Hist Gradient Boosting,175,30.11825595339608
+Mumbai,Persistence,175,14.308571428571428
+Mumbai,Historical - Ridge Regression,175,12.9576096008343
+Mumbai,Historical - Random Forest,175,13.641274958502779
+Mumbai,Historical - Hist Gradient Boosting,175,13.59208254639865
+Mumbai,Recent - Ridge Regression,175,13.275815231168183
+Mumbai,Recent - Random Forest,175,14.027606055918024
+Mumbai,Recent - Hist Gradient Boosting,175,14.141789066319387

@@ -1,0 +1,11 @@
+Experiment,Model,Accuracy,MacroPrecision,MacroRecall,MacroF1
+Model A — same-day classification,Baseline (most frequent),0.346,0.058,0.167,0.086
+Model A — same-day classification,Logistic Regression,0.719,0.666,0.638,0.644
+Model A — same-day classification,Decision Tree,0.732,0.717,0.666,0.681
+Model A — same-day classification,Random Forest,0.769,0.778,0.671,0.691
+Recent — next-day classification,Baseline: tomorrow = today,0.7070634072770691,0.590085148572376,0.5935269889323193,0.5917480167883861
+Recent — next-day classification,Random Forest,0.6925469741720606,0.5668436728278216,0.6139261102051741,0.5843088953576974
+Recent — next-day classification,Hist Gradient Boosting (tuned),0.6834663482687111,0.5563082225115236,0.6355469596447059,0.5841255260081946
+Recent — next-day classification,Hist Gradient Boosting,0.6826494061459184,0.5495704503276622,0.628832062853404,0.5767979385245422
+Recent — next-day classification,Logistic Regression,0.6705523785584113,0.500549834451204,0.6486080557573101,0.5381091146888151
+Recent — next-day classification,Baseline: always 'Satisfactory',0.3296989882486018,0.0549498313747669,0.1666666666666666,0.0826500311128965
