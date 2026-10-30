@@ -1,0 +1,5 @@
+Model,MAE,RMSE,R2
+Baseline (predict mean),102.224,130.034,-0.169
+Linear Regression,27.802,45.866,0.855
+Decision Tree,23.812,50.536,0.823
+Random Forest,19.961,41.165,0.883

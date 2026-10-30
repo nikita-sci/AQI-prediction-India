@@ -1,0 +1,11 @@
+Result_file,Available,Path
+model_a_regression,True,outputs\regression_results.csv
+model_a_classification,True,outputs\classification_results.csv
+model_a_next_day,True,outputs\next_day_results.csv
+recent_regression,True,reports\results_regression_2023_25.csv
+recent_classification,True,reports\results_classification_2023_25.csv
+model_b_historical,True,reports\results\modelb\historical_model_results.csv
+model_b_matched,True,reports\results\modelb\all_models_same_test_results.csv
+model_b_predictions,True,reports\results\modelb\predictions_same_test_rows.csv
+model_b_cities,True,reports\results\modelb\city_wise_errors.csv
+recent_test_predictions,True,data\Cleaned\predictions_2023_25_test.csv
