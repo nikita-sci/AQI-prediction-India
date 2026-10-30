@@ -1,5 +1,4 @@
-"""Build task-specific datasets (regression, classification, time series)
-from the shared base table data/Cleaned/city_day_clean.csv."""
+"""We now take the cleaned data sets and use thatto divide it into 3 separate datasets for 3 different workings: i.e Regression, classification and Time series forecasting."""
 from pathlib import Path
 import sqlite3
 import pandas as pd
