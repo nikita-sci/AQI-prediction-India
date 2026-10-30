@@ -9,7 +9,6 @@ Two notebooks make up the project:
 | `notebooks/city_hour_analysis.ipynb` | Core pipeline: cleaning, EDA, feature engineering, regression and classification models |
 | `notebooks/city_hour_extension.ipynb` | Extensions: forecasting, Diwali effect, lockdown impact, PCA, city comparison |
 
-Both notebooks are already executed, so outputs are visible directly on GitHub.
 
 ---
 
