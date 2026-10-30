@@ -2,9 +2,9 @@
 
 Notebook: `notebooks/city_hour_analysis.ipynb` (already executed; outputs visible on GitHub).
 
-**Place files like this in the repo:**
-- `data/raw/city_hour.csv` (original file; ~65 MB, fine for GitHub's 100 MB limit, or keep it git-ignored)
-- `data/processed/city_hour_clean.csv.gz` (cleaned + feature-engineered, 19 MB)
+**Placed files like this in the repo:**
+- `data/raw/city_hour.csv` 
+- `data/processed/city_hour_clean.csv.gz` (cleaned + feature-engineered)
 - `outputs/figures/city_hour/*.png`, `outputs/results/city_hour_*.csv`
 
 **Pipeline:** clean (dates, duplicates, sort, drop empty rows, drop Xylene 61% missing) -> hourly EDA -> time features
