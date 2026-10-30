@@ -1,5 +1,4 @@
-"""Build task-specific datasets (regression, classification, time series)
-from the shared base table data/Cleaned/city_day_clean.csv."""
+"""We now take the cleaned data sets and use thatto divide it into 3 separate datasets for 3 different workings: i.e Regression, classification and Time series forecasting."""
 from pathlib import Path
 import sqlite3
 import pandas as pd
@@ -80,6 +79,7 @@ def build_timeseries(base: pd.DataFrame) -> pd.DataFrame:
     lag_cols = ["AQI", "AQI_Lag1", "AQI_Lag2", "AQI_Lag3", "AQI_Last7_Mean"]
     cols = ["City", "Date", "Split"] + POLLUTANTS + DATE_FEATURES + lag_cols + ["AQI_Next_Day"]
     return ts[cols].sort_values(["City", "Date"]).reset_index(drop=True)
+    #For handling the missing values we use Imputation: which is replacing missing values with estimated values rather than just deleting the column or row.
 
 
 def save(df: pd.DataFrame, name: str, conn: sqlite3.Connection) -> None:
@@ -99,7 +99,7 @@ def main() -> None:
         save(build_regression(base), "city_day_regression", conn)
         save(build_classification(base), "city_day_classification", conn)
         save(build_timeseries(base), "city_day_timeseries", conn)
-    print("\nDone. Files saved in data/Cleaned/ and tables added to aqi.db")
+    print("\nDone. Now we have 4 datasets to work with: city_day_clean, city_day_classification, city_day_regression,city_day_timeseries.")
 
 
 if __name__ == "__main__":
