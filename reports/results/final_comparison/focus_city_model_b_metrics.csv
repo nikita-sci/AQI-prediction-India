@@ -11,7 +11,7 @@ Chandigarh,Historical - Ridge Regression,175,29.344609613739177
 Chandigarh,Historical - Random Forest,175,29.796582541478212
 Chandigarh,Historical - Hist Gradient Boosting,175,29.79734413592988
 Chandigarh,Recent - Ridge Regression,175,29.647179616339546
-Chandigarh,Recent - Random Forest,175,29.606048222816394
+Chandigarh,Recent - Random Forest,175,29.60604822281639
 Chandigarh,Recent - Hist Gradient Boosting,175,30.11825595339608
 Mumbai,Persistence,175,14.308571428571428
 Mumbai,Historical - Ridge Regression,175,12.9576096008343
