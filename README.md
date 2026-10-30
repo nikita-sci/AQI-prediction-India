@@ -83,8 +83,3 @@ data/processed/*.db
 
 ---
 
-## Reproducing
-
-1. Place `city_hour.csv` in `data/raw/`.
-2. Run `notebooks/city_hour_analysis.ipynb` to produce the cleaned dataset, figures, and core results.
-3. Run `notebooks/city_hour_extension.ipynb` to produce the extension results and regenerate `data/processed/city_hour.db`.
